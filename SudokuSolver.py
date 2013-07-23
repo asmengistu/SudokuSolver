@@ -1,6 +1,7 @@
 def solve(lGrid, sOutFile = None, currentDepth = 0):
 	'''
 	Solves a Sudoku puzzle
+	lGrid should be a list of 81 integers.
 	If sOutFile is provided, the grid is written out to the given file
 	during every iteration at least once (before propagation and after
 		if the propagation altered the grid)
@@ -42,7 +43,7 @@ def solve(lGrid, sOutFile = None, currentDepth = 0):
 	
 	#sort by fewest options
 	sortedIndices = [x[0] for x in sorted(zip(range(len(sudoku)), sudoku), \
-											key = lambda x: len(x[1][1]))]
+		key = lambda x: len(x[1][1]))]
 	for i in sortedIndices:
 		s = sudoku[i]
 		if s[0] == 0:
@@ -53,6 +54,7 @@ def solve(lGrid, sOutFile = None, currentDepth = 0):
 				soln = solve(branch, sOutFile, currentDepth + 1)
 				if soln and isSolved(soln):
 					return soln
+	
 	return [x[0] for x in sudoku]
 
 def propagate(sudoku):
@@ -64,7 +66,6 @@ def propagate(sudoku):
 	constraints = [getBox, getRow, getCol]
 	while changed:
 		changed = False
-		
 		#look for squares with only 1 possible option
 		for i in range(len(sudoku)):
 			s = sudoku[i]
