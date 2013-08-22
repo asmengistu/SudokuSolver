@@ -1,3 +1,13 @@
+'''
+Started as a solution to ProjectEuler.net problem #96
+http://projecteuler.net/problem=96
+
+Constraint Programming Ideas mainly inspired 
+by Courera's Discrete Optimization class with Pascal Van Hentenryck
+
+Written by Abel Mengistu, 2013
+'''
+
 def solve(lGrid, sOutFile = None, currentDepth = 0):
 	'''
 	Solves a Sudoku puzzle
@@ -5,7 +15,7 @@ def solve(lGrid, sOutFile = None, currentDepth = 0):
 	If sOutFile is provided, the grid is written out to the given file
 	during every iteration at least once (before propagation and after
 		if the propagation altered the grid)
-	currentDepth is used to indent recursive calls to the method
+	currentDepth is used to indent output in recursive calls to the method
 	'''
 	if sOutFile and currentDepth == 0:
 		with open(sOutFile, 'w') as f:
@@ -18,7 +28,6 @@ def solve(lGrid, sOutFile = None, currentDepth = 0):
 	prune(sudoku)
 	#oldG used to check if the propagation changed the grid
 	oldG  = reprGrid(sudoku)
-	#write to file before propagating
 	if sOutFile:
 		writeGridToFile(sudoku, sOutFile, currentDepth)
 	propagate(sudoku)
@@ -31,7 +40,7 @@ def solve(lGrid, sOutFile = None, currentDepth = 0):
 		if s[0] == 0 and len(s[1]) == 0:
 			return None
 	
-	#counts the frequency of all possible values for any square
+	#store frequency of all possible values for any square
 	frequency = {}
 	for s in sudoku:
 		if s[0] == 0:
@@ -41,13 +50,15 @@ def solve(lGrid, sOutFile = None, currentDepth = 0):
 				else:
 					frequency[p] = 1
 	
-	#sort by fewest options
+	#sort squares by number of possible values in ascending order
+	# - we do this to increase probability of guessing correct value
 	sortedIndices = [x[0] for x in sorted(zip(range(len(sudoku)), sudoku), \
 		key = lambda x: len(x[1][1]))]
 	for i in sortedIndices:
 		s = sudoku[i]
 		if s[0] == 0:
 			#for each possible value, use the frequency from above to sort
+			# - again to further increase probability of guessing correct value
 			for possibleValue in sorted(s[1], key = lambda x: frequency[x]):
 				branch = [x[0] for x in sudoku]
 				branch[i] = possibleValue
