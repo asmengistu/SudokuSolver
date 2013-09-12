@@ -6,23 +6,31 @@ Constraint Programming Ideas mainly inspired
 by Courera's Discrete Optimization class with Pascal Van Hentenryck
 
 Written by Abel Mengistu, 2013
+
+A grid is internally represented as a list(array) of squares:
+ Each square is represented as: [int_value, set]
+ where set is a set of possible values for that square if value = 0
 '''
 
-def solve(lGrid, sOutFile = None, currentDepth = 0):
+def solve(grid, sOutFile = None, currentDepth = 0):
 	'''
-	Solves a Sudoku puzzle
-	lGrid should be a list of 81 integers.
-	If sOutFile is provided, the grid is written out to the given file
-	during every iteration at least once (before propagation and after
-		if the propagation altered the grid)
-	currentDepth is used to indent output in recursive calls to the method
+	Solves a Sudoku puzzle and returns the solution as a list
+	
+	Keyword Arguments:
+	grid -- should be a list of 81 integers,
+			internal representation (valid input): [value, set(possible values)]
+	sOutFile -- if provided, the grid is written out to the given file
+				during every iteration before and after propagation
+				if the propagation altered the grid
 	'''
+	#if writing intermediate steps to file, clear that file on first iteration
 	if sOutFile and currentDepth == 0:
 		with open(sOutFile, 'w') as f:
 			f.write('')
-	if type(lGrid) == list:
+	#create representation of grid from list of values
+	if type(grid) == list:
 		sudoku = []
-		for i in lGrid:	
+		for i in grid:	
 			p = set(range(1,10)) if i == 0 else set()
 			sudoku.append([i, p])
 	prune(sudoku)
@@ -40,7 +48,7 @@ def solve(lGrid, sOutFile = None, currentDepth = 0):
 		if s[0] == 0 and len(s[1]) == 0:
 			return None
 	
-	#store frequency of all possible values for any square
+	#calculate frequency of all possible values in the grid
 	frequency = {}
 	for s in sudoku:
 		if s[0] == 0:
