@@ -1,6 +1,6 @@
 '''
-Started as a solution to ProjectEuler.net problem #96
-http://projecteuler.net/problem=96
+Started as a solution to a ProjectEuler.net problem
+http://projecteuler.net
 
 Constraint Programming Ideas mainly inspired 
 by Courera's Discrete Optimization class with Pascal Van Hentenryck
